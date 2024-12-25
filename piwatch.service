@@ -1,0 +1,9 @@
+[Unit]
+Description=PiWatch by migsantiago.com
+After=multi-user.target
+
+[Service]
+ExecStart=/home/pi/piwatch.sh
+
+[Install]
+WantedBy=multi-user.target

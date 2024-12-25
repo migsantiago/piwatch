@@ -1,0 +1,6 @@
+D:\visual_c_sharp\CyrrusPi\git\cyrruspi\bin\Debug\cyrruspi.exe
+D:\visual_c_sharp\CyrrusPi\git\cyrruspi\bin\Debug\cyrruspi.pdb
+D:\visual_c_sharp\CyrrusPi\git\cyrruspi\obj\Debug\cyrruspi.csproj.CoreCompileInputs.cache
+D:\visual_c_sharp\CyrrusPi\git\cyrruspi\obj\Debug\cyrruspi.exe
+D:\visual_c_sharp\CyrrusPi\git\cyrruspi\obj\Debug\cyrruspi.pdb
+D:\visual_c_sharp\CyrrusPi\git\cyrruspi\obj\Debug\cyrruspi.csprojAssemblyReference.cache

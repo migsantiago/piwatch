@@ -1,16 +1,16 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\visual_c_sharp\\CyrrusPi_standalone\\git\\cyrruspi\\",
+  "WorkspaceRootPath": "D:\\visual_c_sharp\\PiWatch\\piwatch\\PiWatch\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7C3F73D9-8C7E-467E-8832-92F78C7EDDE3}|cyrruspi.csproj|d:\\visual_c_sharp\\cyrruspi_standalone\\git\\cyrruspi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7C3F73D9-8C7E-467E-8832-92F78C7EDDE3}|cyrruspi.csproj|d:\\visual_c_sharp\\piwatch\\piwatch\\piwatch\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C3F73D9-8C7E-467E-8832-92F78C7EDDE3}|cyrruspi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|cyrruspi||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C3F73D9-8C7E-467E-8832-92F78C7EDDE3}|cyrruspi.csproj|d:\\visual_c_sharp\\cyrruspi_standalone\\git\\cyrruspi\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|5e9a8ac2-4f34-4521-858f-4c248ba31532"
+      "AbsoluteMoniker": "D:0:0:{7C3F73D9-8C7E-467E-8832-92F78C7EDDE3}|cyrruspi.csproj|d:\\visual_c_sharp\\piwatch\\piwatch\\piwatch\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|5e9a8ac2-4f34-4521-858f-4c248ba31532"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,9 +26,9 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "cyrruspi",
-              "DocumentMoniker": "D:\\visual_c_sharp\\CyrrusPi_standalone\\git\\cyrruspi\\cyrruspi.csproj",
+              "DocumentMoniker": "D:\\visual_c_sharp\\PiWatch\\piwatch\\PiWatch\\cyrruspi.csproj",
               "RelativeDocumentMoniker": "cyrruspi.csproj",
-              "ToolTip": "D:\\visual_c_sharp\\CyrrusPi_standalone\\git\\cyrruspi\\cyrruspi.csproj",
+              "ToolTip": "D:\\visual_c_sharp\\PiWatch\\piwatch\\PiWatch\\cyrruspi.csproj",
               "RelativeToolTip": "cyrruspi.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-12-24T23:05:05.875Z",
@@ -38,11 +38,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\visual_c_sharp\\CyrrusPi_standalone\\git\\cyrruspi\\Program.cs",
+              "DocumentMoniker": "D:\\visual_c_sharp\\PiWatch\\piwatch\\PiWatch\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\visual_c_sharp\\CyrrusPi_standalone\\git\\cyrruspi\\Program.cs",
+              "ToolTip": "D:\\visual_c_sharp\\PiWatch\\piwatch\\PiWatch\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAADAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-24T02:23:19.444Z",
               "EditorCaption": ""

@@ -28,6 +28,7 @@ using System.Drawing.Drawing2D;
 using cyrruspi.Properties;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
 
 namespace cyrruspi
 {
@@ -40,7 +41,7 @@ namespace cyrruspi
 
         static void Main(string[] args)
         {
-            Console.WriteLine("PiWatch 2.0 - migsantiago.com");
+            Console.WriteLine("PiWatch 2.1 - migsantiago.com");
             while (true)
             {
                 drawBitmap();
@@ -94,16 +95,25 @@ namespace cyrruspi
             Bitmap bmp;
 
             var timeNow = DateTime.Now;
-            var brush = Brushes.Blue;
+
+            Boolean isDay;
 
             if ((timeNow.Hour >= 7) && (timeNow.Hour < 18))
+            {
+                isDay = true;
+            }
+            else
+            {
+                isDay = false;
+            }
+
+            if (isDay)
             {
                 bmp = new Bitmap(Resources.daySky);
             }
             else
             {
                 bmp = new Bitmap(Resources.nightSky);
-                brush = Brushes.FloralWhite;
             }
 
             RectangleF rectf = new RectangleF(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -126,22 +136,108 @@ namespace cyrruspi
             //-rwxr--r-- 1 root root 47128 Dec 24 17:50 ComingSoon - Regular.ttf
             //-rwxr--r-- 1 root root 11560 Dec 24 17:50 LICENSE.txt
 
+            FontFamily fontFamily = new FontFamily("Coming Soon");
+
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;
+
             var time = DateTime.Now;
             String hourString = ((time.Hour == 0) ? ("12") : time.Hour.ToString("D2"));
-            g.DrawString(hourString + ":" + time.Minute.ToString("D2"), new Font("Coming Soon", 180, FontStyle.Bold), brush, rectf, sf);
+            String timeString = 
+                hourString 
+                + ":"
+                + time.Minute.ToString("D2");
 
-            rectf.Y = 270;
-            g.DrawString(time.DayOfWeek.ToString(), new Font("Coming Soon", 50), brush, rectf, sf);
+            // Tips to draw outline text:
+            // https://www.codeproject.com/Articles/42529/Outline-Text
 
-            rectf.Y += 90;
-            g.DrawString(getMonth(time.Month) + " " + time.Day.ToString("D2") + GetDaySuffix(time.Day) + " " + time.Year.ToString(), new Font("Coming Soon", 50), brush, rectf, sf);
+            // -----------------------------------------------------------
+            // Time
+            {
+                GraphicsPath path = new GraphicsPath();
+                path.AddString(timeString, fontFamily, (int)FontStyle.Bold, 230, rectf, sf);
+
+                Pen pen = new Pen(Color.Black, 10);
+                pen.LineJoin = LineJoin.Round;
+
+                g.DrawPath(pen, path);
+
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    rectf,
+                    Color.White,
+                    (isDay ? Color.DarkBlue : Color.DarkOrange),
+                    LinearGradientMode.Vertical);
+                g.FillPath(gradientBrush, path);
+
+                path.Dispose();
+                pen.Dispose();
+                gradientBrush.Dispose();
+            }
+
+            // -----------------------------------------------------------
+            // Weekday
+            {
+                rectf.Y = 260;
+
+                GraphicsPath path = new GraphicsPath();
+                path.AddString(time.DayOfWeek.ToString(), fontFamily, (int)FontStyle.Regular, 64, rectf, sf);
+
+                Pen pen = new Pen(Color.Black, 5);
+                pen.LineJoin = LineJoin.Round;
+
+                g.DrawPath(pen, path);
+
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    rectf,
+                    Color.White,
+                    (isDay ? Color.DarkBlue : Color.DarkOrange),
+                    LinearGradientMode.Vertical);
+                g.FillPath(gradientBrush, path);
+
+                path.Dispose();
+                pen.Dispose();
+                gradientBrush.Dispose();
+            }
+
+            // -----------------------------------------------------------
+            // Date
+            {
+                rectf.Y += 100;
+
+                GraphicsPath path = new GraphicsPath();
+                path.AddString(getMonth(time.Month) + " " + time.Day.ToString("D2") + GetDaySuffix(time.Day) + " " + time.Year.ToString(),
+                    fontFamily,
+                    (int)FontStyle.Regular,
+                    64,
+                    rectf,
+                    sf);
+
+                Pen pen = new Pen(Color.Black, 5);
+                pen.LineJoin = LineJoin.Round;
+
+                g.DrawPath(pen, path);
+
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    rectf,
+                    Color.White,
+                    (isDay ? Color.DarkBlue : Color.DarkOrange),
+                    LinearGradientMode.Vertical);
+                g.FillPath(gradientBrush, path);
+
+                path.Dispose();
+                pen.Dispose();
+                gradientBrush.Dispose();
+            }
 
             g.Flush();
 
             // Convert the bitmap into raw data that the frame buffer expects
             var raw = convertTo16BPP(bmp);
+
+            // Dispose objects
+            fontFamily.Dispose();
+            g.Dispose();
+            bmp.Dispose();
 
             // Write the frame buffer
             writeFrameBuffer(raw);
@@ -151,8 +247,17 @@ namespace cyrruspi
         {
             UInt16[,] array = new UInt16[SCREEN_WIDTH, SCREEN_HEIGHT];
 
+            BitmapData imageData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+
+            int bytesPerPixel = 3; // PixelFormat.Format24bppRgb
+
+            byte* scan0 = (byte*)imageData.Scan0.ToPointer();
+            int stride = imageData.Stride;
+
             for (int row = 0; row < SCREEN_HEIGHT; row++)
             {
+                byte* rawRow = scan0 + (row * stride);
+
                 for (int column = 0; column < SCREEN_WIDTH; column++)
                 {
                     // For 32 bits per pixel
@@ -169,16 +274,29 @@ namespace cyrruspi
                     //    rgba 5 / 11,6 / 5,5 / 0,0 / 0
                     //endmode
 
-                    var fullPixel = bmp.GetPixel(column, row);
+                    //var fullPixel = bmp.GetPixel(column, row); // -> slow!
+
+                    //UInt16 pixel =
+                    //    (UInt16)
+                    //    ((UInt16)((fullPixel.R & 0xF8) << 8)
+                    //    | (UInt16)((fullPixel.G & 0xFC) << 3)
+                    //    | (UInt16)(fullPixel.B >> 3));
+
+                    int blueIndex = column * bytesPerPixel;
+                    int greenIndex = blueIndex + 1;
+                    int redIndex = blueIndex + 2;
+
                     UInt16 pixel =
                         (UInt16)
-                        ((UInt16)((fullPixel.R & 0xF8) << 8)
-                        | (UInt16)((fullPixel.G & 0xFC) << 3)
-                        | (UInt16)(fullPixel.B >> 3));
+                        ((UInt16)((rawRow[redIndex] & 0xF8) << 8)
+                        | (UInt16)((rawRow[greenIndex] & 0xFC) << 3)
+                        | (UInt16)(rawRow[blueIndex] >> 3));
 
                     array[column, row] = pixel;
                 }
             }
+
+            bmp.UnlockBits(imageData);
 
             return array;
         }

@@ -14,3 +14,12 @@ D:\visual_c_sharp\CyrrusPi_standalone\git\cyrruspi\obj\Release\cyrruspi.csproj.G
 D:\visual_c_sharp\CyrrusPi_standalone\git\cyrruspi\obj\Release\cyrruspi.csproj.CoreCompileInputs.cache
 D:\visual_c_sharp\CyrrusPi_standalone\git\cyrruspi\obj\Release\piwatch.exe
 D:\visual_c_sharp\CyrrusPi_standalone\git\cyrruspi\obj\Release\piwatch.pdb
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\bin\Release\piwatch.exe.config
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\bin\Release\piwatch.exe
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\bin\Release\piwatch.pdb
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\obj\Release\cyrruspi.csproj.AssemblyReference.cache
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\obj\Release\cyrruspi.Properties.Resources.resources
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\obj\Release\cyrruspi.csproj.GenerateResource.cache
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\obj\Release\cyrruspi.csproj.CoreCompileInputs.cache
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\obj\Release\piwatch.exe
+D:\visual_c_sharp\PiWatch\piwatch\PiWatch\obj\Release\piwatch.pdb

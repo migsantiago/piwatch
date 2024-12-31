@@ -29,6 +29,9 @@ using cyrruspi.Properties;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 
 namespace cyrruspi
 {
@@ -39,13 +42,46 @@ namespace cyrruspi
 
         static int bitsPerPixel = 16;
 
+        static void isRebootTriggered(DateTime rebootTime)
+        {
+            var now = DateTime.Now;
+
+            TimeSpan delta = now - rebootTime;
+
+            if ((delta.TotalSeconds >= 0) && (delta.TotalSeconds <= 15))
+            {
+                Console.WriteLine("Auto-rebooting with reboot time "
+                    + rebootTime
+                    + " and current time "
+                    + now);
+
+                var process = new ProcessStartInfo(@"/usr/bin/sudo");
+                process.Arguments = @"/usr/sbin/reboot";
+                process.UseShellExecute = false;
+                Process.Start(process);
+            }
+        }
+
         static void Main(string[] args)
         {
-            Console.WriteLine("PiWatch 2.1 - migsantiago.com");
+            Console.WriteLine("PiWatch 2.2 - migsantiago.com");
+
             while (true)
             {
                 drawBitmap();
                 Thread.Sleep(1000);
+
+                // Reboot my Pi every day
+                var now = DateTime.Now;
+                DateTime rebootTime = new DateTime(
+                    now.Year,
+                    now.Month,
+                    now.Day,
+                    3,
+                    0,
+                    0);
+
+                isRebootTriggered(rebootTime);
             }
         }
 
@@ -92,7 +128,7 @@ namespace cyrruspi
 
         static void drawBitmap()
         {
-            Bitmap bmp;
+            Bitmap bmp = null;
 
             var timeNow = DateTime.Now;
 
@@ -107,13 +143,48 @@ namespace cyrruspi
                 isDay = false;
             }
 
-            if (isDay)
+            Color outlineColor = (isDay ? Color.White : Color.Black);
+            Color startGradient = (isDay ? Color.Black : Color.White);
+            Color endGradient = (isDay ? Color.Blue : Color.Orange);
+
+            var now = DateTime.Now;
+
+            // Load a custom background from the current running directory
+            String customFileName =
+                AppDomain.CurrentDomain.BaseDirectory
+                + "/customPiWatch/custom_"
+                + now.Day 
+                + "_" 
+                + now.Month 
+                + ".png";
+            Console.WriteLine(customFileName);
+            if (File.Exists(customFileName))
             {
-                bmp = new Bitmap(Resources.daySky);
+                bmp = new Bitmap(customFileName);
+
+                if ((bmp.Width == 800) || (bmp.Height == 480))
+                {
+                    outlineColor = Color.Black;
+                    startGradient = Color.White;
+                    endGradient = Color.White;
+                }
+                else
+                {
+                    bmp.Dispose();
+                    bmp = null;
+                }
             }
-            else
+
+            if (bmp == null)
             {
-                bmp = new Bitmap(Resources.nightSky);
+                if (isDay)
+                {
+                    bmp = new Bitmap(Resources.daySky);
+                }
+                else
+                {
+                    bmp = new Bitmap(Resources.nightSky);
+                }
             }
 
             RectangleF rectf = new RectangleF(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -157,15 +228,15 @@ namespace cyrruspi
                 GraphicsPath path = new GraphicsPath();
                 path.AddString(timeString, fontFamily, (int)FontStyle.Bold, 230, rectf, sf);
 
-                Pen pen = new Pen(Color.Black, 10);
+                Pen pen = new Pen(outlineColor, 10);
                 pen.LineJoin = LineJoin.Round;
 
                 g.DrawPath(pen, path);
 
                 LinearGradientBrush gradientBrush = new LinearGradientBrush(
                     rectf,
-                    Color.White,
-                    (isDay ? Color.DarkBlue : Color.DarkOrange),
+                    startGradient,
+                    endGradient,
                     LinearGradientMode.Vertical);
                 g.FillPath(gradientBrush, path);
 
@@ -182,15 +253,15 @@ namespace cyrruspi
                 GraphicsPath path = new GraphicsPath();
                 path.AddString(time.DayOfWeek.ToString(), fontFamily, (int)FontStyle.Regular, 64, rectf, sf);
 
-                Pen pen = new Pen(Color.Black, 5);
+                Pen pen = new Pen(outlineColor, 5);
                 pen.LineJoin = LineJoin.Round;
 
                 g.DrawPath(pen, path);
 
                 LinearGradientBrush gradientBrush = new LinearGradientBrush(
                     rectf,
-                    Color.White,
-                    (isDay ? Color.DarkBlue : Color.DarkOrange),
+                    startGradient,
+                    endGradient,
                     LinearGradientMode.Vertical);
                 g.FillPath(gradientBrush, path);
 
@@ -212,15 +283,15 @@ namespace cyrruspi
                     rectf,
                     sf);
 
-                Pen pen = new Pen(Color.Black, 5);
+                Pen pen = new Pen(outlineColor, 5);
                 pen.LineJoin = LineJoin.Round;
 
                 g.DrawPath(pen, path);
 
                 LinearGradientBrush gradientBrush = new LinearGradientBrush(
                     rectf,
-                    Color.White,
-                    (isDay ? Color.DarkBlue : Color.DarkOrange),
+                    startGradient,
+                    endGradient,
                     LinearGradientMode.Vertical);
                 g.FillPath(gradientBrush, path);
 
